@@ -1,0 +1,6 @@
+flask
+ollama
+ddgs
+flask-cors
+gunicorn
+
