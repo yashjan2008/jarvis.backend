@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import ollama
 
 app = Flask(__name__)
 CORS(app)
@@ -11,20 +10,22 @@ def home():
 
 @app.route("/chat", methods=["POST"])
 def chat():
+
     data = request.get_json()
-    msg = data.get("message", "")
+    msg = data.get("message", "").lower()
 
-    response = ollama.chat(
-        model="gemma:2b",
-        messages=[
-            {
-                "role": "user",
-                "content": msg
-            }
-        ]
-    )
+    if "hello" in msg:
+        reply = "Hello sir!"
 
-    reply = response["message"]["content"]
+    elif "who are you" in msg:
+        reply = "I am JARVIS."
+
+    elif "time" in msg:
+        from datetime import datetime
+        reply = datetime.now().strftime("%H:%M")
+
+    else:
+        reply = "I am still learning."
 
     return jsonify({
         "reply": reply
