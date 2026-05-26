@@ -1,6 +1,5 @@
 flask
-ollama
-ddgs
 flask-cors
+groq
 gunicorn
 
