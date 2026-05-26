@@ -1,8 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from groq import Groq
+import os
 
 app = Flask(__name__)
 CORS(app)
+
+client = Groq(
+    api_key="YOUR_GROQ_API_KEY"
+)
 
 @app.route("/")
 def home():
@@ -12,20 +18,23 @@ def home():
 def chat():
 
     data = request.get_json()
-    msg = data.get("message", "").lower()
+    msg = data.get("message", "")
 
-    if "hello" in msg:
-        reply = "Hello sir!"
+    response = client.chat.completions.create(
+        model="llama3-8b-8192",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are JARVIS, a smart AI assistant."
+            },
+            {
+                "role": "user",
+                "content": msg
+            }
+        ]
+    )
 
-    elif "who are you" in msg:
-        reply = "I am JARVIS."
-
-    elif "time" in msg:
-        from datetime import datetime
-        reply = datetime.now().strftime("%H:%M")
-
-    else:
-        reply = "I am still learning."
+    reply = response.choices[0].message.content
 
     return jsonify({
         "reply": reply
