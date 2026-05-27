@@ -1,7 +1,7 @@
 from groq import Groq
 
 client = Groq(
-    api_key="YOUR_API_KEY"
+    api_key="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"
 )
 
 def ai_chat(message):
